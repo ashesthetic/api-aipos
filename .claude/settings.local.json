@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mysql -u root -e \"CREATE DATABASE IF NOT EXISTS aipos_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;\")",
+      "Bash(php artisan:*)",
+      "Bash(composer global:*)",
+      "Bash(valet link:*)",
+      "Bash(valet secure:*)",
+      "Bash(valet links:*)"
+    ]
+  }
+}
