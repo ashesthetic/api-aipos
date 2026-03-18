@@ -20,8 +20,7 @@ Route::prefix('v1')->group(function () {
             Route::get('me', [AuthController::class, 'me']);
         });
 
-        // Users — admin only
-        Route::middleware('role:admin')
-            ->apiResource('users', UserController::class);
+        // Users — policy handles per-action authorization
+        Route::apiResource('users', UserController::class);
     });
 });

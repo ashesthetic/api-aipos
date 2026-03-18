@@ -11,17 +11,35 @@ class AdminUserSeeder extends Seeder
 {
     public function run(): void
     {
-        User::updateOrCreate(
-            ['email' => 'admin@gmail.com'],
+        $users = [
             [
                 'name'     => 'Administrator',
                 'nickname' => 'Admin',
                 'email'    => 'admin@gmail.com',
                 'password' => Hash::make('11111111'),
                 'role'     => UserRole::Admin,
-                'active'   => true,
-                'dormant'  => false,
-            ]
-        );
+            ],
+            [
+                'name'     => 'Manager',
+                'nickname' => 'Manager',
+                'email'    => 'manager@gmail.com',
+                'password' => Hash::make('111111'),
+                'role'     => UserRole::Manager,
+            ],
+            [
+                'name'     => 'Staff',
+                'nickname' => 'Staff',
+                'email'    => 'staff@gmail.com',
+                'password' => Hash::make('111111'),
+                'role'     => UserRole::Staff,
+            ],
+        ];
+
+        foreach ($users as $data) {
+            User::updateOrCreate(
+                ['email' => $data['email']],
+                array_merge($data, ['active' => true, 'dormant' => false])
+            );
+        }
     }
 }

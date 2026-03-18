@@ -16,14 +16,25 @@ class StoreUserRequest extends FormRequest
 
     public function rules(): array
     {
+        $allowedRoles = $this->user()->role === UserRole::Manager
+            ? Rule::in([UserRole::Staff->value])
+            : Rule::enum(UserRole::class);
+
         return [
             'name'     => ['required', 'string', 'max:255'],
             'nickname' => ['nullable', 'string', 'max:100'],
             'email'    => ['required', 'email', 'unique:users,email'],
             'password' => ['required', Password::min(8)],
-            'role'     => ['required', Rule::enum(UserRole::class)],
+            'role'     => ['required', $allowedRoles],
             'active'   => ['sometimes', 'boolean'],
             'dormant'  => ['sometimes', 'boolean'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'role.in' => 'Managers can only assign the staff role.',
         ];
     }
 }

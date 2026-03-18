@@ -18,14 +18,25 @@ class UpdateUserRequest extends FormRequest
     {
         $userId = $this->route('user');
 
+        $allowedRoles = $this->user()->role === UserRole::Manager
+            ? Rule::in([UserRole::Staff->value])
+            : Rule::enum(UserRole::class);
+
         return [
             'name'     => ['sometimes', 'string', 'max:255'],
             'nickname' => ['nullable', 'string', 'max:100'],
             'email'    => ['sometimes', 'email', Rule::unique('users', 'email')->ignore($userId)],
             'password' => ['sometimes', Password::min(8)],
-            'role'     => ['sometimes', Rule::enum(UserRole::class)],
+            'role'     => ['sometimes', $allowedRoles],
             'active'   => ['sometimes', 'boolean'],
             'dormant'  => ['sometimes', 'boolean'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'role.in' => 'Managers can only assign the staff role.',
         ];
     }
 }
