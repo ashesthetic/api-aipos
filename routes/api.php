@@ -1,6 +1,7 @@
 <?php
 
 use App\Modules\Auth\Controllers\AuthController;
+use App\Modules\Options\Controllers\OptionController;
 use App\Modules\Users\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,5 +23,8 @@ Route::prefix('v1')->group(function () {
 
         // Users — policy handles per-action authorization
         Route::apiResource('users', UserController::class);
+
+        // Options — admin only via policy
+        Route::apiResource('options', OptionController::class);
     });
 });

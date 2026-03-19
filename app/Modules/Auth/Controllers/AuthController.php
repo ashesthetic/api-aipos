@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Modules\Auth\Requests\LoginRequest;
 use App\Modules\Auth\Resources\AuthResource;
 use App\Modules\Auth\Services\AuthService;
+use App\Modules\Options\Models\Option;
 use App\Modules\Users\Resources\UserResource;
 use App\Traits\ApiResponse;
 use Illuminate\Auth\AuthenticationException;
@@ -46,6 +47,11 @@ class AuthController extends Controller
 
     public function me(Request $request): JsonResponse
     {
-        return $this->successResponse(new UserResource($request->user()));
+        $onboarding = Option::where('key', 'onboarding')->value('value') === 'true';
+
+        return $this->successResponse([
+            'user'       => new UserResource($request->user()),
+            'onboarding' => $onboarding,
+        ]);
     }
 }
